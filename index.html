@@ -6,136 +6,181 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="重訓課表">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#378ADD">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <title>重訓課表</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#fff;--bg2:#f5f5f5;--bg3:#efefef;
-  --text:#111;--text2:#666;--text3:#999;
-  --border:#e0e0e0;--border2:#ccc;
-  --success-bg:#e8f5e9;--success-border:#a5d6a7;--success-text:#2e7d32;
-  --danger-bg:#fdecea;--danger-text:#c62828;
-  --blue:#378ADD;--green:#1D9E75;
+  --bg:#fff;--bg2:#f5f5f7;--bg3:#e8e8ed;
+  --text:#111;--text2:#555;--text3:#999;
+  --border:#ddd;--border2:#bbb;
+  --blue:#378ADD;--green:#1D9E75;--red:#e53935;--orange:#f57c00;
+  --success-bg:#e8f5e9;--success-border:#81c784;--success-text:#2e7d32;
   --radius:10px;--radius-lg:14px;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bot:env(safe-area-inset-bottom,0px);
 }
-@media(prefers-color-scheme:dark){
-  :root{
-    --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
-    --text:#fff;--text2:#adadad;--text3:#6e6e73;
-    --border:#3a3a3c;--border2:#545458;
-    --success-bg:#1a3320;--success-border:#2e7d32;--success-text:#69bb7a;
-    --danger-bg:#3b1414;--danger-text:#ff6b6b;
-  }
-}
-html,body{height:100%;overflow:hidden}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
-#app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto;width:100%}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+  --text:#f2f2f7;--text2:#adadb8;--text3:#6e6e73;
+  --border:#3a3a3c;--border2:#545458;
+  --success-bg:#1b3a22;--success-border:#388e3c;--success-text:#81c784;
+}}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text)}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;display:flex;flex-direction:column}
+#app{display:flex;flex-direction:column;height:100%;max-width:500px;margin:0 auto;width:100%}
 
-/* top bar */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;border-bottom:0.5px solid var(--border);flex-shrink:0;padding-top:max(12px,env(safe-area-inset-top))}
-.topbar-title{font-size:17px;font-weight:600;color:var(--text)}
-.week-ctrl{display:flex;align-items:center;gap:8px}
-.week-ctrl span{font-size:14px;font-weight:500;color:var(--text2);min-width:52px;text-align:center}
-.wbtn{width:32px;height:32px;border:0.5px solid var(--border2);border-radius:8px;background:none;cursor:pointer;color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center}
+/* topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;border-bottom:.5px solid var(--border);flex-shrink:0;padding-top:calc(12px + var(--safe-top));background:var(--bg)}
+.topbar-title{font-size:17px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.week-ctrl{display:flex;align-items:center;gap:6px}
+.week-ctrl span{font-size:13px;font-weight:500;color:var(--text2);min-width:48px;text-align:center}
+.wbtn{width:30px;height:30px;border:.5px solid var(--border2);border-radius:8px;background:none;cursor:pointer;color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center}
+.prog-sel{height:30px;font-size:13px;padding:0 8px;border-radius:8px;border:.5px solid var(--border2);background:var(--bg2);color:var(--text);cursor:pointer;max-width:110px}
 
-/* scroll content */
+/* scroll */
 .scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px 16px}
 
-/* tab bar */
-.tabbar{display:flex;border-top:0.5px solid var(--border);flex-shrink:0;padding-bottom:max(8px,env(safe-area-inset-bottom));background:var(--bg)}
-.tabbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px 4px;border:none;background:none;cursor:pointer;color:var(--text3);font-size:10px;gap:3px}
-.tabbtn i{font-size:22px}
+/* tabbar */
+.tabbar{display:flex;border-top:.5px solid var(--border);flex-shrink:0;padding-bottom:calc(6px + var(--safe-bot));background:var(--bg)}
+.tabbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px 4px;border:none;background:none;cursor:pointer;color:var(--text3);font-size:9px;gap:2px}
+.tabbtn i{font-size:21px}
 .tabbtn.active{color:var(--blue)}
-.tabbtn span{font-weight:500}
+.tabbtn span{font-weight:500;white-space:nowrap}
 
-/* exercise card */
-.ex-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px;margin-bottom:10px}
-.ex-name{font-size:16px;font-weight:600;color:var(--text);margin-bottom:2px}
-.ex-sub{font-size:12px;color:var(--text3);margin-bottom:10px}
-.act-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.abtn{height:34px;padding:0 10px;font-size:12px;border:0.5px solid var(--border);border-radius:8px;background:var(--bg2);cursor:pointer;color:var(--text2);display:flex;align-items:center;gap:4px;font-weight:500}
+/* cards */
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--radius-lg);padding:14px;margin-bottom:10px}
+.card-title{font-size:16px;font-weight:600;margin-bottom:2px}
+.card-sub{font-size:12px;color:var(--text3);margin-bottom:10px}
+
+/* buttons */
+.row-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.abtn{height:34px;padding:0 10px;font-size:12px;border:.5px solid var(--border);border-radius:8px;background:var(--bg2);cursor:pointer;color:var(--text2);display:flex;align-items:center;gap:4px;font-weight:500;white-space:nowrap}
 .abtn:active{opacity:.7}
-.abtn.del:active{background:var(--danger-bg);color:var(--danger-text)}
+.abtn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.abtn.danger{background:none}
+.abtn.danger:active{background:#fdecea;color:var(--red)}
+.icon-btn{width:34px;height:34px;border:.5px solid var(--border);border-radius:8px;background:var(--bg2);cursor:pointer;color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:16px}
+.icon-btn:active{opacity:.7}
+.full-btn{width:100%;height:48px;font-size:14px;border:.5px solid var(--border2);border-radius:var(--radius-lg);background:none;cursor:pointer;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px}
+.full-btn:active{background:var(--bg2)}
+.full-btn.solid{background:var(--blue);color:#fff;border-color:var(--blue);margin-top:0}
+.full-btn.solid:active{opacity:.85}
 
 /* sets */
-.sets-hdr{display:grid;grid-template-columns:28px 1fr 1fr 52px;gap:6px;margin-bottom:6px}
+.sets-hdr{display:grid;grid-template-columns:26px 1fr 1fr 50px;gap:6px;margin-bottom:6px}
 .sets-hdr span{font-size:11px;color:var(--text3);font-weight:500;text-align:center}
 .sets-hdr span:first-child{text-align:left}
-.set-row{display:grid;grid-template-columns:28px 1fr 1fr 52px;gap:6px;align-items:center;margin-bottom:6px}
-.snum{font-size:13px;color:var(--text3);text-align:center;font-weight:500}
-.sinput{width:100%;height:48px;border:0.5px solid var(--border);border-radius:8px;padding:0 6px;font-size:17px;text-align:center;background:var(--bg2);color:var(--text);-webkit-appearance:none;appearance:none}
+.set-row{display:grid;grid-template-columns:26px 1fr 1fr 50px;gap:6px;align-items:center;margin-bottom:6px}
+.snum{font-size:12px;color:var(--text3);text-align:center}
+.sinput{width:100%;height:46px;border:.5px solid var(--border);border-radius:8px;padding:0 6px;font-size:17px;text-align:center;background:var(--bg2);color:var(--text);-webkit-appearance:none}
 .sinput:focus{outline:none;border-color:var(--blue)}
 .sinput.done{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}
-.chkbtn{width:52px;height:48px;border:0.5px solid var(--border2);border-radius:8px;background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:20px}
+.chkbtn{width:50px;height:46px;border:.5px solid var(--border2);border-radius:8px;background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:20px}
 .chkbtn.done{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}
-.chkbtn:active{opacity:.7}
-
 .prog{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
 .prog-fill{height:100%;background:var(--green);border-radius:2px;transition:width .3s}
 
-.add-btn{width:100%;height:50px;border:1px dashed var(--border2);border-radius:var(--radius-lg);background:none;cursor:pointer;color:var(--text3);font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px}
-.add-btn:active{background:var(--bg2)}
-
-/* stat bar */
-.stat-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+/* stats */
+.stat-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0}
 .stat-card{background:var(--bg2);border-radius:10px;padding:10px;text-align:center}
-.stat-val{font-size:22px;font-weight:600;color:var(--text)}
-.stat-lbl{font-size:11px;color:var(--text3);margin-top:2px}
+.stat-val{font-size:20px;font-weight:600}
+.stat-lbl{font-size:11px;color:var(--text3);margin-top:1px}
 
-/* history */
-.hist-sel{width:100%;height:48px;font-size:15px;padding:0 12px;border-radius:10px;border:0.5px solid var(--border);background:var(--bg2);color:var(--text);margin-bottom:14px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
-.chart-wrap{position:relative;height:200px;margin-bottom:14px;background:var(--bg2);border-radius:var(--radius-lg);padding:12px}
-.hist-empty{text-align:center;padding:60px 20px;color:var(--text3)}
-.hist-empty .ico{font-size:48px;margin-bottom:12px}
-.hist-empty p{font-size:14px;line-height:1.6}
-.hist-table{border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid var(--border)}
-.hist-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-bottom:0.5px solid var(--border)}
+/* library */
+.muscle-group{margin-bottom:12px}
+.muscle-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg2);border-radius:10px;cursor:pointer;margin-bottom:4px}
+.muscle-header-left{display:flex;align-items:center;gap:8px}
+.muscle-dot{width:10px;height:10px;border-radius:50%}
+.muscle-name{font-size:14px;font-weight:600}
+.muscle-count{font-size:12px;color:var(--text3)}
+.ex-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:.5px solid var(--border);border-radius:10px;margin-bottom:4px;background:var(--bg)}
+.ex-item-left{flex:1;min-width:0}
+.ex-item-name{font-size:14px;font-weight:500;margin-bottom:2px}
+.ex-item-sub{font-size:11px;color:var(--text3)}
+.ex-item-right{display:flex;gap:6px;flex-shrink:0}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+
+/* program list */
+.prog-item{display:flex;align-items:center;justify-content:space-between;padding:14px;border:.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:8px;background:var(--bg);cursor:pointer}
+.prog-item.active-prog{border-color:var(--blue);background:rgba(55,138,221,0.06)}
+.prog-item-left{}
+.prog-item-name{font-size:15px;font-weight:600;margin-bottom:3px}
+.prog-item-sub{font-size:12px;color:var(--text3)}
+.prog-item-right{display:flex;align-items:center;gap:8px}
+.active-badge{background:var(--blue);color:#fff;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:500}
+
+/* day tabs */
+.day-tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px;scrollbar-width:none}
+.day-tabs::-webkit-scrollbar{display:none}
+.day-tab{flex-shrink:0;height:34px;padding:0 14px;border-radius:20px;border:.5px solid var(--border);background:var(--bg2);cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);white-space:nowrap}
+.day-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* history chart */
+.chart-wrap{position:relative;height:190px;background:var(--bg2);border-radius:var(--radius-lg);padding:12px;margin-bottom:12px}
+.hist-sel{width:100%;height:46px;font-size:14px;padding:0 12px;border-radius:10px;border:.5px solid var(--border);background:var(--bg2);color:var(--text);margin-bottom:12px;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.hist-table{border-radius:var(--radius-lg);overflow:hidden;border:.5px solid var(--border)}
+.hist-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-bottom:.5px solid var(--border)}
 .hist-row:last-child{border-bottom:none}
-.hist-row span{font-size:13px;padding:12px 8px;text-align:center;color:var(--text)}
-.hist-row.hdr span{font-size:11px;color:var(--text3);font-weight:600;padding:8px;background:var(--bg2)}
+.hist-row span{font-size:13px;padding:11px 6px;text-align:center;color:var(--text)}
+.hist-row.hdr span{font-size:11px;color:var(--text3);font-weight:600;padding:7px;background:var(--bg2)}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text3)}
+.empty-state i{font-size:40px;display:block;margin-bottom:10px}
+.empty-state p{font-size:14px;line-height:1.7}
 
 /* modal */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:flex-end;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal-sheet{background:var(--bg);border-radius:20px 20px 0 0;padding:20px 20px max(20px,env(safe-area-inset-bottom));width:100%;max-width:480px}
-.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 20px}
-.modal-sheet h3{font-size:17px;font-weight:600;margin-bottom:16px}
-.modal-sheet input{width:100%;height:50px;font-size:16px;margin-bottom:10px;border-radius:10px;border:0.5px solid var(--border);padding:0 14px;background:var(--bg2);color:var(--text)}
-.modal-sheet input:focus{outline:none;border-color:var(--blue)}
-.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.modal-btns button{height:50px;font-size:16px;font-weight:500;border-radius:12px;border:0.5px solid var(--border);background:var(--bg2);cursor:pointer;color:var(--text)}
-.modal-btns button.confirm{background:var(--blue);color:#fff;border-color:var(--blue)}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+.sheet{background:var(--bg);border-radius:20px 20px 0 0;padding:0 18px calc(18px + var(--safe-bot));width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
+.sheet-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:14px auto 16px}
+.sheet h3{font-size:17px;font-weight:600;margin-bottom:14px}
+.field{margin-bottom:10px}
+.field label{font-size:12px;color:var(--text3);font-weight:500;display:block;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;height:46px;font-size:15px;border-radius:10px;border:.5px solid var(--border);padding:0 12px;background:var(--bg2);color:var(--text);-webkit-appearance:none}
+.field textarea{height:80px;padding:10px 12px;resize:none}
+.field input:focus,.field select:focus{outline:none;border-color:var(--blue)}
+.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.modal-btns button{height:48px;font-size:15px;font-weight:500;border-radius:12px;border:.5px solid var(--border);background:var(--bg2);cursor:pointer;color:var(--text)}
+.modal-btns button.ok{background:var(--blue);color:#fff;border-color:var(--blue)}
 .modal-btns button:active{opacity:.8}
+.divider{height:.5px;background:var(--border);margin:14px 0}
 
-/* icons via unicode fallback */
-.icon-chevron-l::before{content:'‹'}
-.icon-chevron-r::before{content:'›'}
+/* inline input */
+.inline-field{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.inline-field input,.inline-field select{flex:1;height:40px;font-size:14px;border-radius:8px;border:.5px solid var(--border);padding:0 10px;background:var(--bg2);color:var(--text)}
+.inline-field label{font-size:13px;color:var(--text2);flex-shrink:0;width:52px}
+
+/* muscle color dots */
+.c0{background:#e57373}.c1{background:#64b5f6}.c2{background:#81c784}.c3{background:#ffb74d}.c4{background:#ba68c8}.c5{background:#4dd0e1}.c6{background:#f06292}.c7{background:#a1887f}
+.tc0{background:#fce8e8;color:#c62828}.tc1{background:#e3f2fd;color:#1565c0}.tc2{background:#e8f5e9;color:#2e7d32}.tc3{background:#fff3e0;color:#e65100}.tc4{background:#f3e5f5;color:#6a1b9a}.tc5{background:#e0f7fa;color:#006064}.tc6{background:#fce4ec;color:#880e4f}.tc7{background:#efebe9;color:#4e342e}
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 </head>
 <body>
 <div id="app">
-  <div class="topbar">
-    <div class="topbar-title" id="tab-title">訓練A · 上半身</div>
-    <div class="week-ctrl" id="week-ctrl">
-      <button class="wbtn" onclick="changeWeek(-1)" aria-label="上一週">‹</button>
-      <span id="week-lbl">第 1 週</span>
-      <button class="wbtn" onclick="changeWeek(1)" aria-label="下一週">›</button>
+  <div class="topbar" id="topbar">
+    <div class="topbar-title" id="top-title">訓練記錄</div>
+    <div class="topbar-right" id="top-right">
+      <div class="week-ctrl" id="week-ctrl">
+        <button class="wbtn" onclick="changeWeek(-1)">‹</button>
+        <span id="week-lbl">第 1 週</span>
+        <button class="wbtn" onclick="changeWeek(1)">›</button>
+      </div>
+      <select class="prog-sel" id="prog-sel" onchange="onProgSelChange()"></select>
     </div>
   </div>
 
   <div class="scroll-area" id="scroll-area">
-    <div id="panel-A"></div>
-    <div id="panel-B" style="display:none"></div>
-    <div id="panel-C" style="display:none"></div>
-    <div id="panel-H" style="display:none"></div>
+    <div id="panel-train"></div>
+    <div id="panel-library" style="display:none"></div>
+    <div id="panel-programs" style="display:none"></div>
+    <div id="panel-history" style="display:none"></div>
   </div>
 
-  <div id="stats-block" style="padding:0 14px 10px;flex-shrink:0;background:var(--bg);border-top:0.5px solid var(--border)">
-    <div style="height:10px"></div>
+  <div id="stats-block" style="padding:10px 14px;flex-shrink:0;background:var(--bg);border-top:.5px solid var(--border)">
     <div class="stat-bar">
       <div class="stat-card"><div class="stat-val" id="st-sets">0</div><div class="stat-lbl">完成組數</div></div>
       <div class="stat-card"><div class="stat-val" id="st-vol">0</div><div class="stat-lbl">訓練量 kg</div></div>
@@ -144,242 +189,584 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
   </div>
 
   <div class="tabbar">
-    <button class="tabbtn active" onclick="switchTab('A',this)" data-label="上半身">
-      <i class="ti ti-barbell"></i><span>上半身</span>
-    </button>
-    <button class="tabbtn" onclick="switchTab('B',this)" data-label="下半身">
-      <i class="ti ti-run"></i><span>下半身</span>
-    </button>
-    <button class="tabbtn" onclick="switchTab('C',this)" data-label="全身">
-      <i class="ti ti-body-scan"></i><span>全身</span>
-    </button>
-    <button class="tabbtn" onclick="switchTab('H',this)" data-label="歷程">
-      <i class="ti ti-chart-line"></i><span>歷程</span>
-    </button>
+    <button class="tabbtn active" onclick="switchTab('train',this)"><i class="ti ti-barbell"></i><span>訓練</span></button>
+    <button class="tabbtn" onclick="switchTab('library',this)"><i class="ti ti-books"></i><span>動作庫</span></button>
+    <button class="tabbtn" onclick="switchTab('programs',this)"><i class="ti ti-layout-list"></i><span>課表</span></button>
+    <button class="tabbtn" onclick="switchTab('history',this)"><i class="ti ti-chart-line"></i><span>歷程</span></button>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
-  <div class="modal-sheet" id="modal-sheet">
-    <div class="modal-handle"></div>
-    <h3 id="modal-title">替換動作</h3>
-    <input type="text" id="m-name" placeholder="動作名稱" />
-    <input type="text" id="m-equip" placeholder="使用器材（選填）" />
-    <input type="number" id="m-rm" inputmode="numeric" placeholder="1RM kg（選填）" />
-    <div class="modal-btns">
-      <button onclick="closeModal()">取消</button>
-      <button class="confirm" onclick="confirmModal()">確認</button>
-    </div>
+<!-- Modal -->
+<div class="overlay" id="overlay" onclick="handleOverlay(event)">
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <div id="sheet-body"></div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-const DEF={
-  A:[
-    {name:'槓鈴臥推',sets:4,reps:'6',rm:90,equip:'臥推椅＋槓鈴'},
-    {name:'俯身槓鈴划船',sets:4,reps:'8',rm:null,equip:'槓鈴＋硬舉區'},
-    {name:'上斜啞鈴臥推',sets:3,reps:'10',rm:null,equip:'可調斜板椅＋啞鈴'},
-    {name:'滑輪下拉',sets:4,reps:'10',rm:null,equip:'Lat Pulldown（寬握）'},
-    {name:'Face Pull',sets:3,reps:'15',rm:null,equip:'Cable高位＋繩索'},
-    {name:'直臂下壓',sets:3,reps:'15',rm:null,equip:'Cable高位＋直槓'},
-  ],
-  B:[
-    {name:'槓鈴深蹲',sets:4,reps:'6',rm:120,equip:'深蹲架＋槓鈴'},
-    {name:'相撲硬舉',sets:4,reps:'5',rm:150,equip:'硬舉區＋槓鈴'},
-    {name:'保加利亞分腿蹲',sets:3,reps:'10/腳',rm:null,equip:'啞鈴＋平板椅'},
-    {name:'羅馬尼亞硬舉',sets:3,reps:'10',rm:null,equip:'槓鈴或啞鈴'},
-    {name:'懸吊抬腿',sets:3,reps:'15',rm:null,equip:'引體向上架'},
-  ],
-  C:[
-    {name:'引體向上',sets:4,reps:'最大次數',rm:null,equip:'引體向上架'},
-    {name:'啞鈴肩推',sets:3,reps:'10',rm:null,equip:'啞鈴＋可調椅'},
-    {name:'單臂啞鈴划船',sets:4,reps:'10/側',rm:null,equip:'啞鈴＋平板椅'},
-    {name:'坐姿划船',sets:4,reps:'10',rm:null,equip:'坐姿划船機'},
-    {name:'弓步蹲',sets:3,reps:'12/腳',rm:null,equip:'啞鈴或徒手'},
-    {name:'棒式',sets:3,reps:'30秒',rm:null,equip:'地墊區'},
-  ]
-};
+// ─── DATA ───────────────────────────────────────────────
+const MUSCLE_GROUPS = [
+  {id:'chest',name:'胸'},
+  {id:'back',name:'背'},
+  {id:'shoulders',name:'肩'},
+  {id:'biceps',name:'二頭'},
+  {id:'triceps',name:'三頭'},
+  {id:'legs',name:'腿'},
+  {id:'glutes',name:'臀'},
+  {id:'core',name:'核心'}
+];
 
-const TAB_LABELS={A:'訓練A · 上半身',B:'訓練B · 下半身',C:'訓練C · 全身',H:'訓練歷程'};
-let plans=JSON.parse(JSON.stringify(DEF));
-let week=1,curTab='A';
-let hist={};
-let chartInst=null;
-let modalMode='',modalTab='',modalEi=null;
+const DEFAULT_LIBRARY = [
+  {id:'e1',name:'槓鈴臥推',muscle:'chest',equip:'臥推椅＋槓鈴',rm:90},
+  {id:'e2',name:'上斜啞鈴臥推',muscle:'chest',equip:'可調斜板椅＋啞鈴',rm:null},
+  {id:'e3',name:'俯身槓鈴划船',muscle:'back',equip:'槓鈴＋硬舉區',rm:null},
+  {id:'e4',name:'滑輪下拉',muscle:'back',equip:'Lat Pulldown（寬握）',rm:null},
+  {id:'e5',name:'引體向上',muscle:'back',equip:'引體向上架',rm:null},
+  {id:'e6',name:'坐姿划船',muscle:'back',equip:'坐姿划船機',rm:null},
+  {id:'e7',name:'單臂啞鈴划船',muscle:'back',equip:'啞鈴＋平板椅',rm:null},
+  {id:'e8',name:'Face Pull',muscle:'shoulders',equip:'Cable高位＋繩索',rm:null},
+  {id:'e9',name:'啞鈴肩推',muscle:'shoulders',equip:'啞鈴＋可調椅',rm:null},
+  {id:'e10',name:'直臂下壓',muscle:'back',equip:'Cable高位＋直槓',rm:null},
+  {id:'e11',name:'槓鈴深蹲',muscle:'legs',equip:'深蹲架＋槓鈴',rm:120},
+  {id:'e12',name:'相撲硬舉',muscle:'glutes',equip:'硬舉區＋槓鈴',rm:150},
+  {id:'e13',name:'羅馬尼亞硬舉',muscle:'glutes',equip:'槓鈴或啞鈴',rm:null},
+  {id:'e14',name:'保加利亞分腿蹲',muscle:'legs',equip:'啞鈴＋平板椅',rm:null},
+  {id:'e15',name:'弓步蹲',muscle:'legs',equip:'啞鈴或徒手',rm:null},
+  {id:'e16',name:'懸吊抬腿',muscle:'core',equip:'引體向上架',rm:null},
+  {id:'e17',name:'棒式',muscle:'core',equip:'地墊區',rm:null},
+];
+
+const DEFAULT_PROGRAMS = [
+  {
+    id:'p1',name:'增肌減脂 3天課表',
+    days:[
+      {id:'d1',name:'訓練A｜上半身',exercises:[
+        {exId:'e1',sets:4,reps:'6'},{exId:'e3',sets:4,reps:'8'},
+        {exId:'e2',sets:3,reps:'10'},{exId:'e4',sets:4,reps:'10'},
+        {exId:'e8',sets:3,reps:'15'},{exId:'e10',sets:3,reps:'15'}
+      ]},
+      {id:'d2',name:'訓練B｜下半身',exercises:[
+        {exId:'e11',sets:4,reps:'6'},{exId:'e12',sets:4,reps:'5'},
+        {exId:'e14',sets:3,reps:'10/腳'},{exId:'e13',sets:3,reps:'10'},
+        {exId:'e16',sets:3,reps:'15'}
+      ]},
+      {id:'d3',name:'訓練C｜全身',exercises:[
+        {exId:'e5',sets:4,reps:'最大次數'},{exId:'e9',sets:3,reps:'10'},
+        {exId:'e7',sets:4,reps:'10/側'},{exId:'e6',sets:4,reps:'10'},
+        {exId:'e15',sets:3,reps:'12/腳'},{exId:'e17',sets:3,reps:'30秒'}
+      ]}
+    ]
+  }
+];
+
+// ─── STATE ──────────────────────────────────────────────
+let library = [];
+let programs = [];
+let activeProgramId = '';
+let activeDayId = '';
+let week = 1;
+let curTab = 'train';
+let hist = {};
+let chartInst = null;
 
 function ld(k,d){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):d}catch(e){return d}}
 function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-function sk(t,w,ei,si,f){return`${t}_w${w}_e${ei}_s${si}_${f}`}
-function hk(t,ei){return`hist_${t}_${ei}`}
+function uid(){return 'id'+Date.now()+Math.random().toString(36).slice(2,6)}
+function sk(pid,did,week,ei,si,f){return`log_${pid}_${did}_w${week}_e${ei}_s${si}_${f}`}
+function hkey(pid,did,ei){return`hist_${pid}_${did}_${ei}`}
 
 function init(){
-  const sp=ld('pwa_plans',null);if(sp)plans=sp;
-  week=ld('pwa_week',1);
+  library = ld('lib_v2', DEFAULT_LIBRARY);
+  programs = ld('prog_v2', DEFAULT_PROGRAMS);
+  activeProgramId = ld('active_prog', programs[0]?.id || '');
+  week = ld('cur_week_v2', 1);
+  // load hist keys
   try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('hist_'))hist[k]=ld(k,[]);}}catch(e){}
-  document.getElementById('week-lbl').textContent=`第 ${week} 週`;
+  // ensure activeProg exists
+  if(!programs.find(p=>p.id===activeProgramId) && programs.length>0){
+    activeProgramId = programs[0].id;
+  }
+  const prog = activeProgram();
+  activeDayId = ld('active_day_'+activeProgramId, prog?.days[0]?.id||'');
+  if(prog && !prog.days.find(d=>d.id===activeDayId)) activeDayId = prog.days[0]?.id||'';
+  document.getElementById('week-lbl').textContent = `第 ${week} 週`;
+  buildProgSel();
 }
 
-function savePlans(){sv('pwa_plans',plans);sv('pwa_week',week);}
+function saveAll(){sv('lib_v2',library);sv('prog_v2',programs);sv('active_prog',activeProgramId);sv('cur_week_v2',week);}
+function activeProgram(){return programs.find(p=>p.id===activeProgramId)||null}
+function activeDay(){const p=activeProgram();return p?p.days.find(d=>d.id===activeDayId)||null:null}
+function exById(id){return library.find(e=>e.id===id)||null}
+function muscleIdx(id){return MUSCLE_GROUPS.findIndex(m=>m.id===id)}
 
-function switchTab(tab,btn){
-  curTab=tab;
+// ─── PROG SELECTOR ──────────────────────────────────────
+function buildProgSel(){
+  const sel = document.getElementById('prog-sel');
+  sel.innerHTML = programs.map(p=>`<option value="${p.id}"${p.id===activeProgramId?' selected':''}>${p.name}</option>`).join('');
+}
+function onProgSelChange(){
+  activeProgramId = document.getElementById('prog-sel').value;
+  const prog = activeProgram();
+  activeDayId = ld('active_day_'+activeProgramId, prog?.days[0]?.id||'');
+  if(prog && !prog.days.find(d=>d.id===activeDayId)) activeDayId = prog.days[0]?.id||'';
+  saveAll();
+  renderTrain();
+}
+
+// ─── TAB SWITCH ─────────────────────────────────────────
+function switchTab(tab, btn){
+  curTab = tab;
   document.querySelectorAll('.tabbtn').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
-  ['A','B','C','H'].forEach(t=>{
-    document.getElementById('panel-'+t).style.display=t===tab?'block':'none';
+  ['train','library','programs','history'].forEach(t=>{
+    document.getElementById('panel-'+t).style.display = t===tab?'block':'none';
   });
-  document.getElementById('week-ctrl').style.display=tab==='H'?'none':'flex';
-  document.getElementById('stats-block').style.display=tab==='H'?'none':'block';
-  document.getElementById('tab-title').textContent=TAB_LABELS[tab];
-  document.getElementById('scroll-area').scrollTop=0;
-  if(tab==='H')renderHist();
-  else renderPanel(tab);
+  const isT = tab==='train';
+  document.getElementById('week-ctrl').style.display = isT?'flex':'none';
+  document.getElementById('prog-sel').style.display = isT?'block':'none';
+  document.getElementById('stats-block').style.display = isT?'block':'none';
+  document.getElementById('scroll-area').scrollTop = 0;
+  const titles = {train:'訓練記錄',library:'動作庫',programs:'課表管理',history:'訓練歷程'};
+  document.getElementById('top-title').textContent = titles[tab];
+  if(tab==='train') renderTrain();
+  else if(tab==='library') renderLibrary();
+  else if(tab==='programs') renderPrograms();
+  else renderHistory();
 }
 
 function changeWeek(d){
-  week=Math.max(1,Math.min(12,week+d));
-  sv('pwa_week',week);
-  document.getElementById('week-lbl').textContent=`第 ${week} 週`;
-  renderPanel(curTab);
+  week = Math.max(1,Math.min(20,week+d));
+  sv('cur_week_v2',week);
+  document.getElementById('week-lbl').textContent = `第 ${week} 週`;
+  renderTrain();
 }
 
-function renderPanel(tab){
-  const exs=plans[tab];
-  const panel=document.getElementById('panel-'+tab);
-  let html='';
-  exs.forEach((ex,ei)=>{
-    const defW=ex.rm?Math.round(ex.rm*0.65/2.5)*2.5:0;
-    html+=`<div class="ex-card">
-      <div class="ex-name">${ex.name}</div>
-      <div class="ex-sub">${ex.sets}組 × ${ex.reps}${ex.equip?' · '+ex.equip:''}</div>
-      <div class="act-row">
-        <button class="abtn" onclick="addSet('${tab}',${ei})"><i class="ti ti-plus" style="font-size:13px"></i>加組</button>
-        <button class="abtn" onclick="rmSet('${tab}',${ei})"><i class="ti ti-minus" style="font-size:13px"></i>減組</button>
-        <button class="abtn" onclick="openModal('replace','${tab}',${ei})"><i class="ti ti-edit" style="font-size:13px"></i>替換</button>
-        <button class="abtn del" onclick="rmEx('${tab}',${ei})"><i class="ti ti-trash" style="font-size:13px"></i>刪除</button>
+// ─── TRAIN ──────────────────────────────────────────────
+function renderTrain(){
+  const prog = activeProgram();
+  const panel = document.getElementById('panel-train');
+  if(!prog){
+    panel.innerHTML=`<div class="empty-state"><i class="ti ti-layout-list"></i><p>尚無課表<br>請先到「課表」分頁建立課表</p></div>`;
+    updateStats([]);return;
+  }
+  const day = activeDay();
+  // day tabs
+  let dtabs = prog.days.map(d=>`<button class="day-tab${d.id===activeDayId?' active':''}" onclick="selectDay('${d.id}')">${d.name}</button>`).join('');
+  let html = `<div class="day-tabs">${dtabs}</div>`;
+  if(!day){panel.innerHTML=html;return;}
+  day.exercises.forEach((item,ei)=>{
+    const ex = exById(item.exId);
+    if(!ex) return;
+    const mi = muscleIdx(ex.muscle);
+    const defW = ex.rm?Math.round(ex.rm*0.65/2.5)*2.5:0;
+    html+=`<div class="card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+        <div>
+          <div class="card-title">${ex.name}</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+            <span class="tag tc${mi}">${MUSCLE_GROUPS[mi]?.name||ex.muscle}</span>
+            <span style="font-size:11px;color:var(--text3)">${item.sets}組 × ${item.reps}${ex.equip?' · '+ex.equip:''}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:5px">
+          <button class="icon-btn" onclick="openReplaceEx('${day.id}',${ei})" title="替換動作"><i class="ti ti-switch-horizontal"></i></button>
+          <button class="icon-btn" onclick="addSet('${day.id}',${ei})" title="加組"><i class="ti ti-plus"></i></button>
+          <button class="icon-btn" onclick="rmSet('${day.id}',${ei})" title="減組"><i class="ti ti-minus"></i></button>
+        </div>
       </div>
       <div class="sets-hdr"><span>#</span><span>重量 kg</span><span>次數</span><span>完成</span></div>`;
-    for(let si=0;si<ex.sets;si++){
-      const wv=ld(sk(tab,week,ei,si,'w'),defW||'');
-      const rv=ld(sk(tab,week,ei,si,'r'),'');
-      const cv=ld(sk(tab,week,ei,si,'c'),false);
+    for(let si=0;si<item.sets;si++){
+      const wv=ld(sk(prog.id,day.id,week,ei,si,'w'),defW||'');
+      const rv=ld(sk(prog.id,day.id,week,ei,si,'r'),'');
+      const cv=ld(sk(prog.id,day.id,week,ei,si,'c'),false);
       const dc=cv?' done':'';
       html+=`<div class="set-row">
         <span class="snum">${si+1}</span>
         <input class="sinput${dc}" type="number" inputmode="decimal" min="0" step="2.5" placeholder="kg" value="${wv}"
-          onchange="saveF('${tab}',${ei},${si},'w',this.value)" />
+          onchange="saveLog('${prog.id}','${day.id}',${ei},${si},'w',this.value)"/>
         <input class="sinput${dc}" type="number" inputmode="numeric" min="0" step="1" placeholder="次" value="${rv}"
-          onchange="saveF('${tab}',${ei},${si},'r',this.value)" />
-        <button class="chkbtn${dc}" onclick="toggleDone('${tab}',${ei},${si},this)" aria-label="完成">
+          onchange="saveLog('${prog.id}','${day.id}',${ei},${si},'r',this.value)"/>
+        <button class="chkbtn${dc}" onclick="toggleDone('${prog.id}','${day.id}',${ei},${si},this)">
           ${cv?'<i class="ti ti-check"></i>':''}
         </button>
       </div>`;
     }
-    const done=Array.from({length:ex.sets},(_,si)=>ld(sk(tab,week,ei,si,'c'),false)).filter(Boolean).length;
-    const pct=ex.sets?Math.round(done/ex.sets*100):0;
-    html+=`<div class="prog"><div class="prog-fill" id="pf-${tab}-${ei}" style="width:${pct}%"></div></div></div>`;
+    const done=Array.from({length:item.sets},(_,si)=>ld(sk(prog.id,day.id,week,ei,si,'c'),false)).filter(Boolean).length;
+    html+=`<div class="prog"><div class="prog-fill" id="pf-${ei}" style="width:${item.sets?Math.round(done/item.sets*100):0}%"></div></div></div>`;
   });
-  html+=`<div style="margin-top:4px"><button class="add-btn" onclick="openModal('add','${tab}',null)"><i class="ti ti-plus"></i> 新增動作</button></div>`;
-  panel.innerHTML=html;
-  updateStats();
+  html+=`<button class="full-btn" onclick="openAddExToDay('${day.id}')"><i class="ti ti-plus"></i> 新增動作</button>`;
+  panel.innerHTML = html;
+  updateStats(day.exercises.map((item,ei)=>({item,ei,pid:prog.id,did:day.id})));
 }
 
-function saveF(tab,ei,si,f,val){sv(sk(tab,week,ei,si,f),val);updateStats();}
+function selectDay(dayId){
+  activeDayId = dayId;
+  sv('active_day_'+activeProgramId, dayId);
+  renderTrain();
+}
 
-function toggleDone(tab,ei,si,btn){
-  const k=sk(tab,week,ei,si,'c');
+function saveLog(pid,did,ei,si,f,val){
+  sv(sk(pid,did,week,ei,si,f),val);
+  updateStats(activeDay()?.exercises.map((item,i)=>({item,ei:i,pid,did}))||[]);
+}
+
+function toggleDone(pid,did,ei,si,btn){
+  const k=sk(pid,did,week,ei,si,'c');
   const nv=!ld(k,false);
   sv(k,nv);
   btn.className='chkbtn'+(nv?' done':'');
   btn.innerHTML=nv?'<i class="ti ti-check"></i>':'';
-  const row=btn.closest('.set-row');
-  row.querySelectorAll('.sinput').forEach(inp=>{nv?inp.classList.add('done'):inp.classList.remove('done');});
+  btn.closest('.set-row').querySelectorAll('.sinput').forEach(inp=>{
+    nv?inp.classList.add('done'):inp.classList.remove('done');
+  });
   if(nv){
-    const w=parseFloat(ld(sk(tab,week,ei,si,'w'),0))||0;
-    const r=parseFloat(ld(sk(tab,week,ei,si,'r'),0))||0;
-    const hkey=hk(tab,ei);
-    const arr=ld(hkey,[]);
+    const w=parseFloat(ld(sk(pid,did,week,ei,si,'w'),0))||0;
+    const r=parseFloat(ld(sk(pid,did,week,ei,si,'r'),0))||0;
+    const hk2=hkey(pid,did,ei);
+    const arr=ld(hk2,[]);
     arr.push({week,w,r,vol:Math.round(w*r)});
-    sv(hkey,arr);hist[hkey]=arr;
+    sv(hk2,arr);hist[hk2]=arr;
   }
-  const ex=plans[tab][ei];
-  const done=Array.from({length:ex.sets},(_,si)=>ld(sk(tab,week,ei,si,'c'),false)).filter(Boolean).length;
-  const pf=document.getElementById(`pf-${tab}-${ei}`);
-  if(pf)pf.style.width=Math.round(done/ex.sets*100)+'%';
-  updateStats();
+  const day=activeDay();
+  if(day){
+    const item=day.exercises[ei];
+    const done=Array.from({length:item.sets},(_,si)=>ld(sk(pid,did,week,ei,si,'c'),false)).filter(Boolean).length;
+    const pf=document.getElementById(`pf-${ei}`);
+    if(pf)pf.style.width=Math.round(done/item.sets*100)+'%';
+    updateStats(day.exercises.map((item,i)=>({item,ei:i,pid,did})));
+  }
 }
 
-function updateStats(){
-  const exs=plans[curTab]||[];
+function updateStats(items){
   let tot=0,done=0,vol=0;
-  exs.forEach((ex,ei)=>{
-    for(let si=0;si<ex.sets;si++){
-      tot++;
-      if(ld(sk(curTab,week,ei,si,'c'),false)){
-        done++;
-        const w=parseFloat(ld(sk(curTab,week,ei,si,'w'),0))||0;
-        const r=parseFloat(ld(sk(curTab,week,ei,si,'r'),0))||0;
-        vol+=w*r;
+  const prog=activeProgram();const day=activeDay();
+  if(prog&&day){
+    day.exercises.forEach((item,ei)=>{
+      for(let si=0;si<item.sets;si++){
+        tot++;
+        if(ld(sk(prog.id,day.id,week,ei,si,'c'),false)){
+          done++;
+          const w=parseFloat(ld(sk(prog.id,day.id,week,ei,si,'w'),0))||0;
+          const r=parseFloat(ld(sk(prog.id,day.id,week,ei,si,'r'),0))||0;
+          vol+=w*r;
+        }
       }
-    }
-  });
+    });
+  }
   document.getElementById('st-sets').textContent=done;
   document.getElementById('st-vol').textContent=Math.round(vol).toLocaleString();
   document.getElementById('st-pct').textContent=tot?Math.round(done/tot*100)+'%':'0%';
 }
 
-function addSet(tab,ei){plans[tab][ei].sets=Math.min(8,plans[tab][ei].sets+1);savePlans();renderPanel(tab);}
-function rmSet(tab,ei){if(plans[tab][ei].sets>1){plans[tab][ei].sets--;savePlans();renderPanel(tab);}}
-function rmEx(tab,ei){if(plans[tab].length>1){plans[tab].splice(ei,1);savePlans();renderPanel(tab);}}
-
-function openModal(mode,tab,ei){
-  modalMode=mode;modalTab=tab;modalEi=ei;
-  const ex=mode==='replace'&&ei!==null?plans[tab][ei]:null;
-  document.getElementById('modal-title').textContent=mode==='add'?'新增動作':'替換動作';
-  document.getElementById('m-name').value=ex?ex.name:'';
-  document.getElementById('m-equip').value=ex&&ex.equip?ex.equip:'';
-  document.getElementById('m-rm').value=ex&&ex.rm?ex.rm:'';
-  document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(()=>document.getElementById('m-name').focus(),100);
+function addSet(did,ei){
+  const p=activeProgram();if(!p)return;
+  const day=p.days.find(d=>d.id===did);if(!day)return;
+  day.exercises[ei].sets=Math.min(10,day.exercises[ei].sets+1);
+  saveAll();renderTrain();
 }
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
-function handleOverlayClick(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
-function confirmModal(){
-  const name=(document.getElementById('m-name').value||'').trim();
+function rmSet(did,ei){
+  const p=activeProgram();if(!p)return;
+  const day=p.days.find(d=>d.id===did);if(!day)return;
+  if(day.exercises[ei].sets>1){day.exercises[ei].sets--;saveAll();renderTrain();}
+}
+
+// ─── REPLACE EX (train panel) ───────────────────────────
+function openReplaceEx(did,ei){
+  const prog=activeProgram();if(!prog)return;
+  const day=prog.days.find(d=>d.id===did);if(!day)return;
+  const cur=exById(day.exercises[ei].exId);
+  const curMuscle=cur?cur.muscle:MUSCLE_GROUPS[0].id;
+  showSheet(`
+    <h3>替換動作</h3>
+    <div class="field"><label>選擇肌群</label>
+      <select id="rep-muscle" onchange="updateRepExList()">
+        ${MUSCLE_GROUPS.map(m=>`<option value="${m.id}"${m.id===curMuscle?' selected':''}>${m.name}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field"><label>選擇動作</label>
+      <select id="rep-ex"></select>
+    </div>
+    <div class="field"><label>組數</label><input type="number" id="rep-sets" value="${day.exercises[ei].sets}" min="1" max="10"/></div>
+    <div class="field"><label>次數／備注</label><input type="text" id="rep-reps" value="${day.exercises[ei].reps}"/></div>
+    <div class="modal-btns">
+      <button onclick="closeModal()">取消</button>
+      <button class="ok" onclick="confirmReplaceEx('${did}',${ei})">確認替換</button>
+    </div>
+  `);
+  updateRepExList(cur?.id);
+}
+
+function updateRepExList(selectId){
+  const muscle=document.getElementById('rep-muscle').value;
+  const exs=library.filter(e=>e.muscle===muscle);
+  const sel=document.getElementById('rep-ex');
+  sel.innerHTML=exs.map(e=>`<option value="${e.id}"${e.id===selectId?' selected':''}>${e.name}</option>`).join('');
+}
+
+function confirmReplaceEx(did,ei){
+  const prog=activeProgram();if(!prog)return;
+  const day=prog.days.find(d=>d.id===did);if(!day)return;
+  const exId=document.getElementById('rep-ex').value;
+  const sets=parseInt(document.getElementById('rep-sets').value)||3;
+  const reps=document.getElementById('rep-reps').value||'10';
+  day.exercises[ei]={exId,sets,reps};
+  saveAll();closeModal();renderTrain();
+}
+
+function openAddExToDay(did){
+  const prog=activeProgram();if(!prog)return;
+  showSheet(`
+    <h3>新增動作</h3>
+    <div class="field"><label>選擇肌群</label>
+      <select id="add-muscle" onchange="updateAddExList()">
+        ${MUSCLE_GROUPS.map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field"><label>選擇動作</label><select id="add-ex"></select></div>
+    <div class="field"><label>組數</label><input type="number" id="add-sets" value="3" min="1" max="10"/></div>
+    <div class="field"><label>次數／備注</label><input type="text" id="add-reps" value="10"/></div>
+    <div class="modal-btns">
+      <button onclick="closeModal()">取消</button>
+      <button class="ok" onclick="confirmAddEx('${did}')">新增</button>
+    </div>
+  `);
+  updateAddExList();
+}
+function updateAddExList(){
+  const muscle=document.getElementById('add-muscle').value;
+  const exs=library.filter(e=>e.muscle===muscle);
+  document.getElementById('add-ex').innerHTML=exs.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+}
+function confirmAddEx(did){
+  const prog=activeProgram();if(!prog)return;
+  const day=prog.days.find(d=>d.id===did);if(!day)return;
+  const exId=document.getElementById('add-ex').value;
+  const sets=parseInt(document.getElementById('add-sets').value)||3;
+  const reps=document.getElementById('add-reps').value||'10';
+  day.exercises.push({exId,sets,reps});
+  saveAll();closeModal();renderTrain();
+}
+
+// ─── LIBRARY ────────────────────────────────────────────
+function renderLibrary(){
+  const panel=document.getElementById('panel-library');
+  let html=`<button class="full-btn solid" style="margin-bottom:12px" onclick="openAddLibEx()"><i class="ti ti-plus"></i> 新增動作</button>`;
+  MUSCLE_GROUPS.forEach((mg,mi)=>{
+    const exs=library.filter(e=>e.muscle===mg.id);
+    html+=`<div class="muscle-group">
+      <div class="muscle-header" onclick="toggleMuscle('mg-${mg.id}')">
+        <div class="muscle-header-left">
+          <div class="muscle-dot c${mi}"></div>
+          <span class="muscle-name">${mg.name}</span>
+          <span class="muscle-count">${exs.length} 個動作</span>
+        </div>
+        <i class="ti ti-chevron-down" id="chev-${mg.id}" style="color:var(--text3);font-size:16px"></i>
+      </div>
+      <div id="mg-${mg.id}">`;
+    exs.forEach(ex=>{
+      html+=`<div class="ex-item">
+        <div class="ex-item-left">
+          <div class="ex-item-name">${ex.name}</div>
+          <div class="ex-item-sub">${ex.equip||''}${ex.rm?' · 1RM '+ex.rm+'kg':''}</div>
+        </div>
+        <div class="ex-item-right">
+          <button class="icon-btn" onclick="openEditLibEx('${ex.id}')"><i class="ti ti-edit"></i></button>
+          <button class="icon-btn" onclick="deleteLibEx('${ex.id}')"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  panel.innerHTML=html;
+}
+
+function toggleMuscle(id){
+  const el=document.getElementById(id);
+  const mg=id.replace('mg-','');
+  const chev=document.getElementById('chev-'+mg);
+  const open=el.style.display!=='none';
+  el.style.display=open?'none':'block';
+  chev.style.transform=open?'rotate(-90deg)':'rotate(0deg)';
+}
+
+function openAddLibEx(){
+  showSheet(`
+    <h3>新增動作到動作庫</h3>
+    <div class="field"><label>動作名稱</label><input type="text" id="lib-name" placeholder="例：啞鈴彎舉"/></div>
+    <div class="field"><label>肌群</label>
+      <select id="lib-muscle">${MUSCLE_GROUPS.map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}</select>
+    </div>
+    <div class="field"><label>使用器材（選填）</label><input type="text" id="lib-equip" placeholder="例：啞鈴"/></div>
+    <div class="field"><label>1RM kg（選填）</label><input type="number" id="lib-rm" inputmode="numeric" placeholder=""/></div>
+    <div class="modal-btns">
+      <button onclick="closeModal()">取消</button>
+      <button class="ok" onclick="confirmAddLibEx()">新增</button>
+    </div>
+  `);
+  setTimeout(()=>document.getElementById('lib-name')?.focus(),80);
+}
+function confirmAddLibEx(){
+  const name=(document.getElementById('lib-name').value||'').trim();
   if(!name)return;
-  const equip=(document.getElementById('m-equip').value||'').trim();
-  const rm=parseFloat(document.getElementById('m-rm').value)||null;
-  if(modalMode==='add'){plans[modalTab].push({name,sets:3,reps:'10',rm,equip});}
-  else{const ex=plans[modalTab][modalEi];ex.name=name;ex.equip=equip;ex.rm=rm;}
-  savePlans();closeModal();renderPanel(modalTab);
+  library.push({id:uid(),name,muscle:document.getElementById('lib-muscle').value,equip:document.getElementById('lib-equip').value.trim(),rm:parseFloat(document.getElementById('lib-rm').value)||null});
+  saveAll();closeModal();renderLibrary();
 }
 
-function renderHist(){
-  const panel=document.getElementById('panel-H');
+function openEditLibEx(exId){
+  const ex=library.find(e=>e.id===exId);if(!ex)return;
+  showSheet(`
+    <h3>編輯動作</h3>
+    <div class="field"><label>動作名稱</label><input type="text" id="lib-name" value="${ex.name}"/></div>
+    <div class="field"><label>肌群</label>
+      <select id="lib-muscle">${MUSCLE_GROUPS.map(m=>`<option value="${m.id}"${m.id===ex.muscle?' selected':''}>${m.name}</option>`).join('')}</select>
+    </div>
+    <div class="field"><label>使用器材</label><input type="text" id="lib-equip" value="${ex.equip||''}"/></div>
+    <div class="field"><label>1RM kg</label><input type="number" id="lib-rm" inputmode="numeric" value="${ex.rm||''}"/></div>
+    <div class="modal-btns">
+      <button onclick="closeModal()">取消</button>
+      <button class="ok" onclick="confirmEditLibEx('${exId}')">儲存</button>
+    </div>
+  `);
+}
+function confirmEditLibEx(exId){
+  const ex=library.find(e=>e.id===exId);if(!ex)return;
+  ex.name=(document.getElementById('lib-name').value||'').trim()||ex.name;
+  ex.muscle=document.getElementById('lib-muscle').value;
+  ex.equip=document.getElementById('lib-equip').value.trim();
+  ex.rm=parseFloat(document.getElementById('lib-rm').value)||null;
+  saveAll();closeModal();renderLibrary();
+}
+function deleteLibEx(exId){
+  if(!confirm('確定刪除此動作？'))return;
+  library=library.filter(e=>e.id!==exId);
+  saveAll();renderLibrary();
+}
+
+// ─── PROGRAMS ───────────────────────────────────────────
+function renderPrograms(){
+  const panel=document.getElementById('panel-programs');
+  let html=`<button class="full-btn solid" style="margin-bottom:12px" onclick="openNewProgram()"><i class="ti ti-plus"></i> 新建課表</button>`;
+  programs.forEach(prog=>{
+    const isActive=prog.id===activeProgramId;
+    html+=`<div class="prog-item${isActive?' active-prog':''}">
+      <div class="prog-item-left" onclick="openEditProgram('${prog.id}')" style="flex:1;cursor:pointer">
+        <div class="prog-item-name">${prog.name}</div>
+        <div class="prog-item-sub">${prog.days.length} 個訓練日 · ${prog.days.reduce((a,d)=>a+d.exercises.length,0)} 個動作</div>
+      </div>
+      <div class="prog-item-right">
+        ${isActive?'<span class="active-badge">使用中</span>':'<button class="abtn" onclick="setActiveProgram(\''+prog.id+'\')">選用</button>'}
+        <button class="icon-btn" onclick="deleteProgram('${prog.id}')"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`;
+  });
+  panel.innerHTML=html;
+}
+
+function setActiveProgram(pid){
+  activeProgramId=pid;
+  const prog=programs.find(p=>p.id===pid);
+  activeDayId=prog?.days[0]?.id||'';
+  saveAll();buildProgSel();renderPrograms();
+}
+function deleteProgram(pid){
+  if(programs.length<=1){alert('至少需保留一個課表');return;}
+  if(!confirm('確定刪除此課表？'))return;
+  programs=programs.filter(p=>p.id!==pid);
+  if(activeProgramId===pid)activeProgramId=programs[0].id;
+  saveAll();buildProgSel();renderPrograms();
+}
+
+function openNewProgram(){
+  showSheet(`
+    <h3>新建課表</h3>
+    <div class="field"><label>課表名稱</label><input type="text" id="prog-name" placeholder="例：增肌 4天課表"/></div>
+    <div class="modal-btns">
+      <button onclick="closeModal()">取消</button>
+      <button class="ok" onclick="confirmNewProgram()">建立</button>
+    </div>
+  `);
+  setTimeout(()=>document.getElementById('prog-name')?.focus(),80);
+}
+function confirmNewProgram(){
+  const name=(document.getElementById('prog-name').value||'').trim();
+  if(!name)return;
+  const newProg={id:uid(),name,days:[{id:uid(),name:'訓練日 A',exercises:[]}]};
+  programs.push(newProg);
+  saveAll();closeModal();renderPrograms();
+}
+
+function openEditProgram(pid){
+  const prog=programs.find(p=>p.id===pid);if(!prog)return;
+  let daysHtml=prog.days.map((d,di)=>`
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+      <input type="text" value="${d.name}" style="flex:1;height:40px;font-size:14px;border-radius:8px;border:.5px solid var(--border);padding:0 10px;background:var(--bg2);color:var(--text)" onchange="renameProgDay('${pid}','${d.id}',this.value)"/>
+      <button class="icon-btn" onclick="removeProgDay('${pid}','${d.id}')"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+  showSheet(`
+    <h3>編輯課表</h3>
+    <div class="field"><label>課表名稱</label><input type="text" id="edit-prog-name" value="${prog.name}"/></div>
+    <div class="divider"></div>
+    <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:10px">訓練日</div>
+    <div id="prog-days-list">${daysHtml}</div>
+    <button class="full-btn" onclick="addProgDay('${pid}')" style="margin-bottom:14px"><i class="ti ti-plus"></i> 新增訓練日</button>
+    <div class="modal-btns">
+      <button onclick="closeModal()">取消</button>
+      <button class="ok" onclick="confirmEditProgram('${pid}')">儲存</button>
+    </div>
+  `);
+}
+function renameProgDay(pid,did,val){
+  const prog=programs.find(p=>p.id===pid);if(!prog)return;
+  const day=prog.days.find(d=>d.id===did);if(day)day.name=val;
+}
+function removeProgDay(pid,did){
+  const prog=programs.find(p=>p.id===pid);if(!prog||prog.days.length<=1)return;
+  prog.days=prog.days.filter(d=>d.id!==did);
+  saveAll();openEditProgram(pid);
+}
+function addProgDay(pid){
+  const prog=programs.find(p=>p.id===pid);if(!prog)return;
+  prog.days.push({id:uid(),name:`訓練日 ${String.fromCharCode(65+prog.days.length)}`,exercises:[]});
+  saveAll();openEditProgram(pid);
+}
+function confirmEditProgram(pid){
+  const prog=programs.find(p=>p.id===pid);if(!prog)return;
+  prog.name=(document.getElementById('edit-prog-name').value||'').trim()||prog.name;
+  saveAll();closeModal();renderPrograms();buildProgSel();
+}
+
+// ─── HISTORY ────────────────────────────────────────────
+function renderHistory(){
+  const panel=document.getElementById('panel-history');
   const allExs=[];
-  const tabLabel={A:'上半身',B:'下半身',C:'全身'};
-  ['A','B','C'].forEach(tab=>{
-    plans[tab].forEach((ex,ei)=>{
-      const k=hk(tab,ei);
-      const arr=hist[k]||ld(k,[]);
-      if(arr.length>0)allExs.push({tab,ei,name:ex.name,key:k,data:arr});
+  programs.forEach(prog=>{
+    prog.days.forEach(day=>{
+      day.exercises.forEach((item,ei)=>{
+        const k=hkey(prog.id,day.id,ei);
+        const arr=hist[k]||ld(k,[]);
+        if(arr.length>0){
+          const ex=exById(item.exId);
+          allExs.push({label:`${prog.name} · ${day.name} · ${ex?.name||'動作'}`,key:k,data:arr});
+        }
+      });
     });
   });
   if(allExs.length===0){
-    panel.innerHTML=`<div class="hist-empty"><div class="ico"><i class="ti ti-chart-line" style="font-size:48px;color:var(--text3)"></i></div><p>完成並勾選組數後<br>將自動記錄訓練歷程</p></div>`;
+    panel.innerHTML=`<div class="empty-state"><i class="ti ti-chart-line"></i><p>完成並勾選組數後<br>將自動記錄訓練歷程</p></div>`;
     return;
   }
   const prevSel=panel.querySelector('.hist-sel');
   const curVal=prevSel?prevSel.value:allExs[0].key;
   const chosen=allExs.find(e=>e.key===curVal)||allExs[0];
   const arr=chosen.data;
-  let opts=allExs.map(e=>`<option value="${e.key}"${e.key===curVal?' selected':''}>${tabLabel[e.tab]} · ${e.name}</option>`).join('');
+  let opts=allExs.map(e=>`<option value="${e.key}"${e.key===curVal?' selected':''}>${e.label}</option>`).join('');
   let rows=arr.slice().reverse().map(d=>`<div class="hist-row">
     <span>第${d.week}週</span><span>${d.w||'-'}</span><span>${d.r||'-'}</span><span>${d.vol||0}</span>
   </div>`).join('');
   panel.innerHTML=`
-    <select class="hist-sel" onchange="renderHist()" id="hist-sel">${opts}</select>
+    <select class="hist-sel" onchange="renderHistory()" id="hist-sel">${opts}</select>
     <div class="chart-wrap"><canvas id="hchart"></canvas></div>
     <div class="hist-table">
       <div class="hist-row hdr"><span>週次</span><span>重量</span><span>次數</span><span>訓練量</span></div>
@@ -387,8 +774,7 @@ function renderHist(){
     </div>`;
   if(chartInst){chartInst.destroy();chartInst=null;}
   const isDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
-  const tc=isDark?'#adadad':'#666';
-  const bc=isDark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.06)';
+  const tc=isDark?'#adadad':'#666';const bc=isDark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.06)';
   chartInst=new Chart(document.getElementById('hchart').getContext('2d'),{
     type:'line',
     data:{
@@ -411,14 +797,22 @@ function renderHist(){
   });
 }
 
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
+// ─── MODAL ──────────────────────────────────────────────
+function showSheet(html){
+  document.getElementById('sheet-body').innerHTML=html;
+  document.getElementById('overlay').classList.add('open');
 }
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+function handleOverlay(e){if(e.target===document.getElementById('overlay'))closeModal();}
 
+// ─── INIT ───────────────────────────────────────────────
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
 init();
-renderPanel('A');
-renderPanel('B');
-renderPanel('C');
+renderTrain();
+renderLibrary();
+renderPrograms();
 </script>
 </body>
 </html>
